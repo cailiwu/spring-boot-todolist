@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Todo List</title>
+</head>
+<body>
+<div class="container">
+    <h2>To Do List</h2>
+    <form class="header" th:action="@{/todos}" method="post" th:object="${todoObject}">
+        <input type="text" id="input" placeholder="New Item..." th:field="*{task}">
+        <button type="submit" class="addBtn">Add</button>
+    </form>
+    <ul th:each="todo: ${todolist}">
+        <li th:onclick="'javascript:change(' + ${todo.id} + ')'"><span th:text="${todo.task}">Walk dog</span> <span
+                class="close">x</span>
+        </li>
+    </ul>
+
+    <script>
+        const change = (id) => {
+            console.log(id);
+        }
+    </script>
+</div>
+</body>
+</html>
