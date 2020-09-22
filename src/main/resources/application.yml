@@ -1,0 +1,25 @@
+server:
+  port: 9100
+
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:todolist
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+  #  devtools:
+  #    restart:
+  #      additional-paths: src/main/java
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/    # 設定去這個資料夾找html檔案
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML5
