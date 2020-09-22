@@ -14,16 +14,8 @@
         <button type="submit" class="addBtn">Add</button>
     </form>
     <ul th:each="todo: ${todolist}">
-        <li th:onclick="'javascript:change(' + ${todo.id} + ')'"><span th:text="${todo.task}">Walk dog</span> <span
-                class="close">x</span>
-        </li>
+        <li><span th:text="${todo.task}"></span> <span class="close">x</span></li>
     </ul>
-
-    <script>
-        const change = (id) => {
-            console.log(id);
-        }
-    </script>
 </div>
 </body>
 </html>
