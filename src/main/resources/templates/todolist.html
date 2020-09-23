@@ -14,8 +14,48 @@
         <button type="submit" class="addBtn">Add</button>
     </form>
     <ul th:each="todo: ${todolist}">
-        <li><span th:text="${todo.task}"></span> <span class="close">x</span></li>
+        <li th:class="${todo.status} == 2 ? 'checked': '' "
+            th:onclick="'javascript:updateTodo(this,' + ${todo.id} + ','+${todo.status} +')'">
+            <span th:text="${todo.task}"></span>
+            <span class="close" th:onclick="'javascript:deleteTodo(event,this,' + ${todo.id} + ')'">x</span>
+        </li>
     </ul>
 </div>
+<script>
+    const updateTodo = (element,id,status) => {
+        console.log("status", status);
+        const notDone = 1;
+        const done = 2;
+        const data = {
+            status: status === done ? notDone : done
+        }
+        fetch('todos/'+ id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+            }).then(function(response) {
+                if (status === done) {
+                    element.classList.remove("checked");
+                } else  {
+                    element.classList.add("checked");
+                }
+        })
+        location.reload();
+    }
+
+    const deleteTodo = (event,element,id) => {
+        event.stopPropagation();
+        fetch('todos/'+ id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }).then(function(response) {
+            element.parentNode.parentNode.parentNode.removeChild(element.parentNode.parentNode);
+        })
+    }
+</script>
 </body>
 </html>
