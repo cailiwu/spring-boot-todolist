@@ -9,9 +9,9 @@
 <body>
 <div class="container">
     <h2>To Do List</h2>
-    <form class="header">
-        <input type="text" id="task" placeholder="New Item...">
-        <button type="button" class="addBtn" th:onclick="addTodo()">Add</button>
+    <form class="header" th:action="@{/todos}" method="post" th:object="${todoObject}">
+        <input type="text" id="input" placeholder="New Item..." th:field="*{task}">
+        <button type="submit" class="addBtn">Add</button>
     </form>
     <ul th:each="todo: ${todolist}">
         <li th:class="${todo.status} == 2 ? 'checked': '' "
@@ -40,29 +40,26 @@
     }
 
     const updateTodo = (element,id,status) => {
-        console.log("status", status);
         const notDone = 1;
         const done = 2;
         const data = {
             status: status === done ? notDone : done
         }
-        console.log(data)
-        fetch('todos/'+ id, {
+        fetch('todos/' + id, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data),
-            }).then(function(response) {
-                if (status === done) {
-                    element.classList.remove("checked");
-                } else  {
-                    element.classList.add("checked");
-                }
+        }).then(function (response) {
+            if (status === done) {
+                element.classList.remove("checked");
+            } else {
+                element.classList.add("checked");
+            }
             location.reload();
         })
     }
-
     const deleteTodo = (event,element,id) => {
         event.stopPropagation();
         fetch('todos/'+ id, {

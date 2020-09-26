@@ -25,12 +25,13 @@ public class TodoController {
         return "todolist";
     }
 
-    @ResponseBody
     @PostMapping("/todos")
-    public String createTodo(@RequestBody Todo todo) {
-        // @Responsebody后返回结果不会被解析为跳转路径
-       todoService.createTodo(todo);
-        return "OK";
+    public String createTodo(@ModelAttribute Todo todo, Model model) {
+        Iterable<Todo> allTodoList = todoService.createTodo(todo);
+        Todo emptyTodo = new Todo();
+        model.addAttribute("todolist", allTodoList);
+        model.addAttribute("todoObject", emptyTodo);
+        return "redirect:/todos";
     }
 
     @ResponseBody
