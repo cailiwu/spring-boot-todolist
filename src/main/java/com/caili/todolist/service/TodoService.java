@@ -31,8 +31,12 @@ public class TodoService {
                 return false;
             }
             newTodo.setStatus(todo.getStatus());
-            todoDao.save(newTodo);
-            return true;
+            try {
+                todoDao.save(newTodo);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
     }
 
     public Optional<Todo> findById(Integer id) {
@@ -45,7 +49,11 @@ public class TodoService {
             if (!findTodo.isPresent()) {
                 return false;
             }
-            todoDao.deleteById(id);
-            return true;
+            try {
+                todoDao.deleteById(id);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
     }
 }
