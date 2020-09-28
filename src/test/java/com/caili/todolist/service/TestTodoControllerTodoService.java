@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doThrow;
 
 @SpringBootTest
-public class TestTodoService {
+public class TestTodoControllerTodoService {
     @Autowired
     TodoService todoService;
 
