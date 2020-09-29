@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -71,7 +72,7 @@ public class TestTodoController {
         todoObject.put("task", "洗衣服");
 
         // 模擬todoService.createTodo(todo) 回傳 id 1
-        Mockito.when(todoService.createTodo(mockTodo)).thenReturn(1);
+        Mockito.when(todoService.createTodo(any())).thenReturn(1);
 
         // 模擬呼叫[POST] /api/todos
         String actual = mockMvc.perform(MockMvcRequestBuilders.post("/api/todos")
@@ -81,17 +82,14 @@ public class TestTodoController {
                 .andExpect(status().isCreated()) // 預期回應的status code 為 201(Created)
                 .andReturn().getResponse().getContentAsString();
 
+        assertEquals(1, Integer.parseInt(actual));
+
     }
 
     @Test
     public void testUpdateTodoSuccess() throws Exception {
-        Todo mockTodo = new Todo();
-        mockTodo.setId(1);
-        mockTodo.setTask("洗衣服");
-        mockTodo.setStatus(1);
-
         // 模擬todoService.updateTodo(1, xxx) 成功，回傳true
-        Mockito.when(todoService.updateTodo(1,mockTodo)).thenReturn(true);
+        Mockito.when(todoService.updateTodo(any(),any())).thenReturn(true);
 
         JSONObject todoObject = new JSONObject();
         todoObject.put("id", 1);
@@ -101,12 +99,28 @@ public class TestTodoController {
 
         // 模擬呼叫[PUT] /api/todos/{id}
          mockMvc.perform(MockMvcRequestBuilders.put("/api/todos/1")
-                .accept(MediaType.APPLICATION_JSON_UTF8 ) //response 設定型別
                 .contentType(MediaType.APPLICATION_JSON) // request 設定型別
                 .content(String.valueOf(todoObject))) // body 內容
                 .andExpect(status().isOk()); // 預期回應的status code 為 200(Ok)
     }
 
+    @Test
+    public void testUpdateTodoIdNotExist() throws Exception {
+        // 模擬todoService.updateTodo(x, xxx) 成功，回傳false
+        Mockito.when(todoService.updateTodo(any(),any())).thenReturn(false);
+
+        JSONObject todoObject = new JSONObject();
+        todoObject.put("id", 1);
+        todoObject.put("task", "洗衣服");
+        todoObject.put("status", 1);
+
+
+        // 模擬呼叫[PUT] /api/todos/{id}
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/todos/1")
+                .contentType(MediaType.APPLICATION_JSON) // request 設定型別
+                .content(String.valueOf(todoObject))) // body 內容
+                .andExpect(status().isBadRequest()); // 預期回應的status code 為 200(Bad Request)
+    }
     @Test
     public void testDeleteTodoSuccess() throws Exception {
         // 模擬todoService.deleteTodo(1) 成功回傳true
