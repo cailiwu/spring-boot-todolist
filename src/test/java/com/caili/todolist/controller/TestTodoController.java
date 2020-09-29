@@ -119,7 +119,7 @@ public class TestTodoController {
         mockMvc.perform(MockMvcRequestBuilders.put("/api/todos/1")
                 .contentType(MediaType.APPLICATION_JSON) // request 設定型別
                 .content(String.valueOf(todoObject))) // body 內容
-                .andExpect(status().isBadRequest()); // 預期回應的status code 為 200(Bad Request)
+                .andExpect(status().isBadRequest()); // 預期回應的status code 為 400(Bad Request)
     }
     @Test
     public void testDeleteTodoSuccess() throws Exception {
